@@ -54,11 +54,76 @@ node* find_node(node* tree,char *key){
         return NULL;
 }
 
+/*not finished*/
+
+node *minValueNode(struct node* node)
+{
+    struct node* current = node;
+    /* loop down to find the leftmost leaf */
+    while (current->left != NULL)
+        current = current->left;
+    return current;
+}
+
+node *delete_node(node* root, char *key)
+{
+    unsigned long h = hash(key);
+    // base case
+    if (root == NULL) return root;
+ 
+    // If the key to be deleted is smaller than the root's key,
+    // then it lies in left subtree
+    if (h < root->hash)
+        root->left = delete_node(root->left, key);
+ 
+    // If the key to be deleted is greater than the root's key,
+    // then it lies in right subtree
+    else if (h > root->hash)
+        root->right = delete_node(root->right, key);
+ 
+    // if key is same as root's key, then This is the node
+    // to be deleted
+    else
+    {
+        // node with only one child or no child
+        if (root->left == NULL)
+        {
+            node *temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            node *temp = root->left;
+            free(root);
+            return temp;
+        }
+ 
+        // node with two children: Get the inorder successor (smallest
+        // in the right subtree)
+        node* temp = minValueNode(root->right);
+ 
+        // Copy the inorder successor's content to this node
+        root->key = temp->key;
+ 
+        // Delete the inorder successor
+        root->right = delete_node(root->right, temp->key);
+    }
+    return root;
+}
+
+void update_node(node* tree, char *key,char *value){
+    node *t = find_node(tree,key);
+    t->value=value;
+}
 int main()
 {
 node *n = new_node("key","value");
 add_node(n,"key2","value2");
 node *a = find_node(n,"key2");
+update_node(a,"key2","newavalue2");
 printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
 printf("%s:%s\nhash value: %lu\n",a->key,a->value,a->hash);
+n = delete_node(n,"key");
+printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
 }
