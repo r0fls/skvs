@@ -114,16 +114,4 @@ void update_node(node* tree, char *key,char *value){
     node *t = find_node(tree,key);
     t->value=value;
 }
-int main()
-{
-     
-node *n = new_node("key","value");
-add_node(n,"isaac","cool person");
-add_node(n,"key2","value2");
-node *a = find_node(n,"isaac");
-/*update_node(a,"key2","newavalue2");*/
-printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
-printf("%s:%s\nhash value: %lu\n",a->key,a->value,a->hash);
-n = delete_node(n,"key");
-printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
-}
+
