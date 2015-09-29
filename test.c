@@ -5,16 +5,18 @@ void serialize(FILE *fp, node *n){
         while(j->left){
             serialize(fp,j->left);
             j->left=NULL;
-    }
+        }
         while(j->right){
             serialize(fp,j->right);
             j->right=NULL;
+        }
+    
+    fprintf(fp,"%lu:%s:%s\n",j->hash,j->key,j->value);
+    j=NULL;
+    }
+    close(fp);
 }
-fprintf(fp,"%lu:%s:%s\n",j->hash,j->key,j->value);
-j=NULL;
-}
-close(fp);
-}
+
 
 int main(){
     node *n = new_node("key","value");
