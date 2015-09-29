@@ -24,13 +24,25 @@ int main(){
     add_node(n,"anotherkey","value3");
     add_node(n,"ahappykey","value3");
     add_node(n,"morekey","value17");
+    add_node(n,"key1","value");
+    add_node(n,"key2","value");
+    add_node(n,"key3","value");
+    add_node(n,"key4","value");
+    add_node(n,"key5","value");
+    add_node(n,"key6","value");
+    add_node(n,"key7","value");
+    add_node(n,"key8","value");
+    add_node(n,"key9","value");
+    add_node(n,"key11","value");
+    add_node(n,"key12","value");
+    add_node(n,"key13","value");
     node *a = find_node(n,"isaac");
-    /*update_node(n,"key2","newavalue2");*/
-    printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
-    printf("%s:%s\nhash value: %lu\n",a->key,a->value,a->hash);
-    n = delete_node(n,"key");
-    printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
+    update_node(n,"key2","newavalue2");
+    printf("%s\t%s\t\thash value: %lu\n",n->key,n->value,n->hash);
+    printf("%s\t%s\t\thash value: %lu\n",a->key,a->value,a->hash);
+    delete_node(n,"key");
+    printf("%s\t%s\t\thash value: %lu\n",n->key,n->value,n->hash);
     FILE *fp;
-    fp = fopen("test.txt","w");
+    fp = fopen("db.txt","w");
     serialize(fp,n);
 }

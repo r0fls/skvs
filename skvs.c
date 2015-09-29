@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAXSIZE 1024
 
@@ -24,6 +25,7 @@ typedef struct node {
 
 node* new_node(char *key, char *value) {
     struct node* result = malloc(sizeof(struct node));
+    memset(result, 0, sizeof(struct node));
     result->key = key;
     result->hash = hash(key);
     result->value = value;
@@ -43,16 +45,17 @@ node* add_node(node* tree, char *key, char *value ){
 };
 
 node* find_node(node* tree,char *key){
+    if(tree == NULL)
+        return NULL;
+    
     unsigned long h = hash(key);
     if(tree->hash==h)
 	    return tree;
-    if(h<tree->hash)
+    if(h<tree->hash && tree->left != NULL)
 		find_node(tree->left,key);
-	if(h>tree->hash)
+	if(h>tree->hash && tree->right !=NULL)
 		find_node(tree->right,key);
-	if(tree == NULL)
-        return NULL;
-}
+	}
 
 node *minValueNode(struct node* node)
 {
@@ -110,20 +113,44 @@ node *delete_node(node* root, char *key)
     return root;
 }
 
-void update_node(node* tree, char *key,char *value){
-    node *t = find_node(tree,key);
-    t->value=value;
+void* delete(node* tree, char* key){
+    tree = delete_node(tree,key);
 }
+
+void update_node(node* tree, char *key,char *value){
+
+    if(tree == NULL)
+        return;
+    
+    unsigned long h = hash(key);
+    if(tree->hash==h)
+	    tree->value = value;
+    if(h<tree->hash && tree->left != NULL)
+		update_node(tree->left,key,value);
+	if(h>tree->hash && tree->right != NULL)
+		update_node(tree->right,key,value);
+	
+}
+
 int main()
 {
-     
 node *n = new_node("key","value");
-add_node(n,"isaac","cool person");
-add_node(n,"key2","value2");
-node *a = find_node(n,"isaac");
-/*update_node(a,"key2","newavalue2");*/
+add_node(n,"key1","value");
+add_node(n,"key2","value");
+add_node(n,"key3","value");
+add_node(n,"key4","value");
+add_node(n,"key5","value");
+add_node(n,"key6","value");
+add_node(n,"key7","value");
+add_node(n,"key8","value");
+add_node(n,"key9","value");
+add_node(n,"key11","value");
+add_node(n,"key12","value");
+add_node(n,"key13","value");
+node *a = find_node(n,"key");
+update_node(n,"key","newavalue2");
 printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
 printf("%s:%s\nhash value: %lu\n",a->key,a->value,a->hash);
-n = delete_node(n,"key");
+delete(n,"key");
 printf("%s:%s\nhash value: %lu\n",n->key,n->value,n->hash);
 }

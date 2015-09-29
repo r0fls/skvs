@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAXSIZE 1024
 
@@ -24,6 +25,7 @@ typedef struct node {
 
 node* new_node(char *key, char *value) {
     struct node* result = malloc(sizeof(struct node));
+    memset(result, 0, sizeof(struct node));
     result->key = key;
     result->hash = hash(key);
     result->value = value;
@@ -43,16 +45,17 @@ node* add_node(node* tree, char *key, char *value ){
 };
 
 node* find_node(node* tree,char *key){
+    if(tree == NULL)
+        return NULL;
+    
     unsigned long h = hash(key);
     if(tree->hash==h)
 	    return tree;
-    if(h<tree->hash)
+    if(h<tree->hash && tree->left != NULL)
 		find_node(tree->left,key);
-	if(h>tree->hash)
+	if(h>tree->hash && tree->right !=NULL)
 		find_node(tree->right,key);
-	if(tree == NULL)
-        return NULL;
-}
+	}
 
 node *minValueNode(struct node* node)
 {
@@ -63,7 +66,7 @@ node *minValueNode(struct node* node)
     return current;
 }
 
-node *delete_node(node* root, char *key)
+node *_delete_node(node* root, char *key)
 {
     unsigned long h = hash(key);
     // base case
@@ -72,12 +75,12 @@ node *delete_node(node* root, char *key)
     // If the key to be deleted is smaller than the root's key,
     // then it lies in left subtree
     if (h < root->hash)
-        root->left = delete_node(root->left, key);
+        root->left = _delete_node(root->left, key);
  
     // If the key to be deleted is greater than the root's key,
     // then it lies in right subtree
     else if (h > root->hash)
-        root->right = delete_node(root->right, key);
+        root->right = _delete_node(root->right, key);
  
     // if key is same as root's key, then This is the node
     // to be deleted
@@ -105,13 +108,26 @@ node *delete_node(node* root, char *key)
         root->key = temp->key;
  
         // Delete the inorder successor
-        root->right = delete_node(root->right, temp->key);
+        root->right = _delete_node(root->right, temp->key);
     }
     return root;
 }
 
-void update_node(node* tree, char *key,char *value){
-    node *t = find_node(tree,key);
-    t->value=value;
+void* delete_node(node* tree, char* key){
+    tree = _delete_node(tree,key);
 }
 
+void update_node(node* tree, char *key,char *value){
+
+    if(tree == NULL)
+        return;
+    
+    unsigned long h = hash(key);
+    if(tree->hash==h)
+	    tree->value = value;
+    if(h<tree->hash && tree->left != NULL)
+		update_node(tree->left,key,value);
+	if(h>tree->hash && tree->right != NULL)
+		update_node(tree->right,key,value);
+	
+}
