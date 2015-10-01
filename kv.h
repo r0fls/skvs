@@ -36,22 +36,22 @@ node* new_node(char *key, char *value) {
 node* add_node(node* tree, char *key, char *value ){
     unsigned long h = hash(key);
 	if(tree==NULL)
-	    return new_node(key,value);
+	    tree=new_node(key,value);
     if(h<tree->hash)
 		tree->left = add_node(tree->left,key,value);
 	if(h>tree->hash)
-		tree->right = add_node(tree->right,key,value);
-	    return tree;
+	    tree->right = add_node(tree->right,key,value);
+    return tree;
 };
 
-char* get_node(node* tree,char *key){
+node* get_node(node* tree,char *key){
 
     if(tree == NULL)
         return NULL;
     
     unsigned long h = hash(key);
     if(tree->hash==h)
-	    return tree->value;
+	    return tree;
     if(h<tree->hash && tree->left != NULL)
 		return get_node(tree->left,key);
 	if(h>tree->hash && tree->right !=NULL)
@@ -116,5 +116,4 @@ node *_delete_node(node* root, char *key)
 void* delete_node(node* tree, char* key){
     tree = _delete_node(tree,key);
 }
-
 
