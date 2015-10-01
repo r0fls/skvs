@@ -17,12 +17,11 @@ void serialize(FILE *fp, node *n){
 
 }
 
-node *deSerialize(FILE *fp){
-       int c;
+node* deSerialize(FILE *fp){
        char key[20];
        char value[MAXSIZE];
-       node *n = NULL;
-       while (fscanf(fp, " %[^*]*%[^*]* ",key,value)!=EOF) { 
+       node * n = NULL;
+       while (fscanf(fp, " %[^*]*%[^*]* ",key,value)==2){
            if (n){
                n = add_node(n,key,value);
        }
@@ -31,11 +30,12 @@ node *deSerialize(FILE *fp){
            }
        }
        return n;
+
 }
 
 int main(){
     node *n = new_node("key","value");
-    n = add_node(n,"isaac","cool person");
+    n = add_node(n,"test","value");
     n = add_node(n,"key13","value");
     n = add_node(n,"key14","value");
     n = add_node(n,"key15","value");
@@ -44,7 +44,6 @@ int main(){
     n = add_node(n,"key18","value");
     n = add_node(n,"key19","value");
     update_node(n,"key11","newavalue2");
-    printf("%s,%s","key19",get_node(n,"key19"));
     n=_delete_node(n,"key");
     FILE *fp,*fp2;
     fp = fopen("test.db","r");
@@ -52,6 +51,7 @@ int main(){
     node *j;*/
     node *j = deSerialize(fp);
     close(fp);
+    printf("%s",j->key);
     fp2 = fopen("test2.db","w");
     serialize(fp2,j);
 }
