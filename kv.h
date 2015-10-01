@@ -26,9 +26,9 @@ typedef struct node {
 node* new_node(char *key, char *value) {
     struct node* result = malloc(sizeof(struct node));
     memset(result, 0, sizeof(struct node));
-    result->key = key;
+    result->key = strdup(key);
     result->hash = hash(key);
-    result->value = value;
+    result->value = strdup(value);
     result->left = result->right = NULL;
     return result;
 }
@@ -42,9 +42,9 @@ node* add_node(node* tree, char *key, char *value ){
 	if(h>tree->hash)
 	    tree->right = add_node(tree->right,key,value);
     return tree;
-};
+}
 
-node* get_node(node* tree,char *key){
+node* find_node(node* tree,char *key){
 
     if(tree == NULL)
         return NULL;
@@ -53,10 +53,10 @@ node* get_node(node* tree,char *key){
     if(tree->hash==h)
 	    return tree;
     if(h<tree->hash && tree->left != NULL)
-		return get_node(tree->left,key);
+		return find_node(tree->left,key);
 	if(h>tree->hash && tree->right !=NULL)
-		return get_node(tree->right,key);
-	}
+		return find_node(tree->right,key);
+}
 
 void update_node(node* tree, char *key,char *value){
 
